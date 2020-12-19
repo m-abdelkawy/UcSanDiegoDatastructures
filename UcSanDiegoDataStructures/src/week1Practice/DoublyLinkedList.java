@@ -1,6 +1,5 @@
 package week1Practice;
 
-import week1Practice.SinglyLinkedList.Node;
 
 public class DoublyLinkedList<T> {
 	private Node head;
