@@ -1,0 +1,295 @@
+package week3Practice;
+
+/**
+ * UC San Diego Data Structures
+ * 
+ * Priority Queue implemented by binary max heap
+ * 
+ * All operations work in time O(log(n)) getMax work in O(1)
+ * 
+ * @author Mohammed Abdelkawy: January 8, 2021
+ */
+
+public class BinaryMaxHeap {
+
+	private int capacity;
+	private int size;
+	private Integer[] Heap;
+
+	public BinaryMaxHeap(int _capacity) {
+		capacity = _capacity;
+		Heap = new Integer[capacity];
+	}
+
+	private int parent(int i) {
+		return i / 2;
+	}
+
+	private int leftChild(int i) {
+		return 2 * i;
+	}
+
+	private int rightChild(int i) {
+		return 2 * i + 1;
+	}
+
+	private void siftUp(int i) {
+		while (i > 0 && Heap[i] > Heap[parent(i)]) {
+			swap(i, parent(i));
+			i = parent(i);
+		}
+	}
+
+	private void siftDown(int i) {
+		int maxIndex = i;
+
+		int l = leftChild(i);
+		if (l <= size && Heap[l - 1] > Heap[maxIndex - 1])
+			maxIndex = l;
+
+		int r = rightChild(i);
+		if (r <= size && Heap[r - 1] > Heap[maxIndex - 1])
+			maxIndex = r;
+
+		if (i != maxIndex) {
+			swap(i - 1, maxIndex - 1);
+			siftDown(maxIndex);
+		}
+	}
+
+	public boolean insert(int p) {
+		if (size == capacity)
+			return false;
+
+		Heap[size++] = p;
+		siftUp(size - 1);
+		return true;
+	}
+
+	private boolean remove(int i) {
+		if (size < 1)
+			return false;
+
+		Heap[i - 1] = Integer.MAX_VALUE;
+
+		siftUp(i - 1);
+
+		extractMax();
+		return true;
+	}
+
+	public int extractMax() {
+		swap(size - 1, 0);
+		int max = Heap[size - 1];
+		Heap[--size] = null;
+		siftDown(1);
+		return max;
+	}
+
+	private void changePriority(int i, int p) {
+		int oldP = Heap[i - 1];
+		Heap[i - 1] = p;
+
+		if (p > oldP)
+			siftUp(i);
+		else
+			siftDown(i);
+	}
+
+	private int getMax() {
+		return Heap[0];
+	}
+
+	private void swap(int i, int j) {
+		int temp = Heap[i];
+		Heap[i] = Heap[j];
+		Heap[j] = temp;
+	}
+
+	private void display() {
+		if (size < 1)
+			System.out.println("Empty!");
+
+		int j = 1; // number of elements in level
+		int i = 0; // index in array
+		int pow = 0; // level index
+		while (i < size) {
+			j = (int) Math.pow(2, pow++);
+			int k = 0;
+			for (; k < j; k++) {
+				if (Heap[i + k] != null)
+					System.out.print(Heap[i + k] + "\t");
+			}
+			System.out.println();
+			i += k;
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		BinaryMaxHeap heap = new BinaryMaxHeap(10);
+
+		heap.insert(5);
+		heap.insert(10);
+		heap.insert(1);
+		heap.insert(7);
+		heap.insert(15);
+
+		heap.insert(3);
+
+		heap.insert(9);
+
+		heap.changePriority(2, 8);
+
+		heap.remove(6);
+		heap.remove(3);
+
+		heap.extractMax();
+		heap.extractMax();
+
+		heap.display();
+	}
+
+}
+
+
+
+/*
+private int capacity;
+	private int size;
+	private Integer[] Heap;
+
+	public BinaryMaxHeap(int _capacity) {
+		capacity = _capacity;
+		Heap = new Integer[capacity];
+	}
+
+	private int parent(int i) {
+		return i / 2;
+	}
+
+	private int leftChild(int i) {
+		return 2 * i;
+	}
+
+	private int rightChild(int i) {
+		return 2 * i + 1;
+	}
+
+	private void siftUp(int i) {
+		while (i > 0 && Heap[i] > Heap[parent(i)]) {
+			swap(i, parent(i));
+			i = parent(i);
+		}
+	}
+
+	private void siftDown(int i) {
+		int maxIndex = i;
+
+		int l = leftChild(i);
+		if (l <= size && Heap[l - 1] > Heap[maxIndex - 1])
+			maxIndex = l;
+
+		int r = rightChild(i);
+		if (r <= size && Heap[r - 1] > Heap[maxIndex - 1])
+			maxIndex = r;
+
+		if (i != maxIndex) {
+			swap(i - 1, maxIndex - 1);
+			siftDown(maxIndex);
+		}
+	}
+
+	public boolean insert(int p) {
+		if (size == capacity)
+			return false;
+
+		Heap[size++] = p;
+		siftUp(size - 1);
+		return true;
+	}
+
+	private boolean remove(int i) {
+		if (size < 1)
+			return false;
+
+		Heap[i - 1] = Integer.MAX_VALUE;
+
+		siftUp(i - 1);
+
+		extractMax();
+		return true;
+	}
+
+	public int extractMax() {
+		swap(size - 1, 0);
+		int max = Heap[size - 1];
+		Heap[--size] = null;
+		siftDown(1);
+		return max;
+	}
+
+	private void changePriority(int i, int p) {
+		int oldP = Heap[i - 1];
+		Heap[i - 1] = p;
+
+		if (p > oldP)
+			siftUp(i);
+		else
+			siftDown(i);
+	}
+
+	private int getMax() {
+		return Heap[0];
+	}
+
+	private void swap(int i, int j) {
+		int temp = Heap[i];
+		Heap[i] = Heap[j];
+		Heap[j] = temp;
+	}
+
+	private void display() {
+		if (size < 1)
+			System.out.println("Empty!");
+
+		int j = 1; // number of elements in level
+		int i = 0; // index in array
+		int pow = 0; // level index
+		while (i < size) {
+			j = (int) Math.pow(2, pow++);
+			int k = 0;
+			for (; k < j; k++) {
+				if (Heap[i + k] != null)
+					System.out.print(Heap[i + k] + "\t");
+			}
+			System.out.println();
+			i += k;
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		BinaryMaxHeap heap = new BinaryMaxHeap(10);
+
+		heap.insert(5);
+		heap.insert(10);
+		heap.insert(1);
+		heap.insert(7);
+		heap.insert(15);
+
+		heap.insert(3);
+
+		heap.insert(9);
+
+		heap.changePriority(2, 8);
+
+		heap.remove(6);
+		heap.remove(3);
+
+		heap.extractMax();
+		heap.extractMax();
+
+		heap.display();
+	}
+*/

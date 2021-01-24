@@ -24,7 +24,7 @@ public class BinaryCounterWithReset {
 				maxA = i;
 			} else {
 				maxA = -1;
-			} 
+			}   
 		}
 	}
 
